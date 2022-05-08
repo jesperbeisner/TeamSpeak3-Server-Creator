@@ -69,7 +69,9 @@ const LoadingButton = (button) => {
 const CreateServerButton = (button) => {
   button.innerHTML = 'Create Server';
   button.classList.remove('btn-primary');
-  button.classList.remove('btn-danger');
+  button.classList.remove('btn-primary');
+  button.classList.remove('server-remove-button');
+  button.classList.add('server-create-button');
   button.classList.add('btn-success');
 }
 
@@ -77,6 +79,8 @@ const RemoveServerButton = (button) => {
   button.innerHTML = 'Remove Server';
   button.classList.remove('btn-success');
   button.classList.remove('btn-primary');
+  button.classList.remove('server-create-button');
+  button.classList.add('server-remove-button');
   button.classList.add('btn-danger');
 }
 
