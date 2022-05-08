@@ -50,7 +50,7 @@ class TeamSpeakController extends AbstractController
         $dockerService->removeTeamSpeakContainer($server);
         sleep(1);
         $dockerService->startTeamSpeakContainer($server);
-        sleep(5);
+        sleep(10);
         [$apiKey, $serverAdminToken] = $dockerService->getApiKeyAndToken($server);
 
         $server->setContainerCreated(new DateTime());
