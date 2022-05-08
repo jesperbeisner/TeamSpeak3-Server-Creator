@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}TeamSpeak3-Server-Creator{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" sizes="16x16">
+
+        {% block stylesheets %}
+            <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+        {% endblock %}
+
+        {% block javascript_start %}
+        {% endblock %}
+    </head>
+    <body class="background-color container">
+
+    <header class="text-center mt-3">
+        <h1>TeamSpeak3-Server-Creator</h1>
+    </header>
+
+    <main class="mt-4 mb-3 text-center">
+        <p class="m-0 p-0">A small application to run 10 TeamSpeak3 servers in their own Docker containers and start or stop them with one click.</p>
+        <p class="m-0 p-0">With the help of TeamSpeak's web query api all servers have directly all necessary channels without creating them manually.</p>
+        <p class="m-0 p-0">The code can be found on <a href="https://github.com/jesperbeisner/TeamSpeak3-Server-Creator">GitHub</a>.</p>
+
+        <p class="alert text-center d-none mt-3" id="alert"></p>
+
+        {% block body %}{% endblock %}
+    </main>
+
+    {% block javascript_end %}
+        <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('js/main.js') }}"></script>
+    {% endblock %}
+    </body>
+</html>
