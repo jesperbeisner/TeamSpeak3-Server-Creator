@@ -1,11 +1,25 @@
 # TeamSpeak3-Server-Creator
 
 ## About
-A small application to originally run 10 TeamSpeak3 servers in their own Docker containers and start or stop them with one click. My cheap 3€ server can't handle 10 containers, so I limited this to 3 at the moment.
+A small application to originally run 10 TeamSpeak3 servers in their own Docker containers and start or stop them with one click.
+
+My cheap 3€ server can't handle 10 containers, so I limited this to 3 at the moment.
 
 With the help of TeamSpeak's web query api all servers have directly all necessary channels without creating them manually.
 
 Created with Symfony 6 and PHP 8.1. Docker is needed on the server were this application will run.
+
+## Preview
+
+### Website
+<div style="text-align:center">
+    <img src="images/website-preview.png"  alt="website preview image"/>
+</div>
+
+### TeamSpeak-Server
+<div style="text-align:center">
+    <img src="images/server-preview.png"  alt="teamspeak server preview image"/>
+</div>
 
 ## Setup/Tear down
 

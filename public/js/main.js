@@ -2,7 +2,7 @@ const CreateServer = (event) => {
   let button = event.target;
   let port = button.dataset.serverPort;
 
-  CreateLoadingButton(button);
+  CreateLoadingButton(port);
 
   fetch('/teamspeak-create/' + port, {
     method: 'POST',
@@ -26,7 +26,7 @@ const RemoveServer = (event) => {
   let button = event.target;
   let port = button.dataset.serverPort;
 
-  CreateLoadingButton(button);
+  CreateLoadingButton(port);
 
   fetch('/teamspeak-remove/' + button.dataset.serverPort, {
     method: 'POST',
@@ -43,11 +43,18 @@ const RemoveServer = (event) => {
     });
 }
 
-const CreateLoadingButton = (button) => {
+const CreateLoadingButton = (port) => {
+  let button = document.createElement("button");
+
   button.innerHTML = 'Loading... ' + LoadIcon;
-  button.classList.remove('btn-success');
-  button.classList.remove('btn-danger');
+  button.classList.add('btn');
   button.classList.add('btn-primary');
+
+  let portRow = document.querySelector('#row-' + port);
+  let buttonData = portRow.querySelector('.button-data');
+
+  buttonData.removeChild(buttonData.querySelector('button'));
+  buttonData.appendChild(button);
 }
 
 const CreateCreateServerButton = (port) => {
