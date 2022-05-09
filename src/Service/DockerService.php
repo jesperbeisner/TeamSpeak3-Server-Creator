@@ -19,10 +19,10 @@ class DockerService
     public function getApiKeyAndToken(Server $server): array
     {
         $projectDir = $this->parameterBag->get('kernel.project_dir');
-        $credentialFile = "$projectDir/var/{$server->getContainerName()}.txt";
+        $credentialsFile = "$projectDir/var/{$server->getContainerName()}.txt";
 
         $process = Process::fromShellCommandline(
-            "docker logs {$server->getContainerName()} 2> $credentialFile"
+            "docker logs {$server->getContainerName()} 2> $credentialsFile"
         );
 
         $process->run();
@@ -31,9 +31,9 @@ class DockerService
             throw new ProcessFailedException($process);
         }
 
-        $content = file_get_contents($credentialFile);
+        $content = file_get_contents($credentialsFile);
 
-        unlink($credentialFile);
+        unlink($credentialsFile);
 
         $apiKey = null;
         $token = null;

@@ -1,7 +1,7 @@
 # TeamSpeak3-Server-Creator
 
 ## About
-A small application to run 10 TeamSpeak3 servers in their own Docker containers and start or stop them with one click.
+A small application to originally run 10 TeamSpeak3 servers in their own Docker containers and start or stop them with one click. My cheap 3€ server can't handle 10 containers, so I limited this to 3 at the moment.
 
 With the help of TeamSpeak's web query api all servers have directly all necessary channels without creating them manually.
 

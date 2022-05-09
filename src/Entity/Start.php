@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\HistoryRepository;
+use App\Repository\StartRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: HistoryRepository::class)]
-class History
+#[ORM\Entity(repositoryClass: StartRepository::class)]
+class Start
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,10 +21,12 @@ class History
     private int $serverPort;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private DateTime $containerCreated;
+    private DateTime $created;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private DateTime $containerRemoved;
+    public function __construct()
+    {
+        $this->created = new DateTime();
+    }
 
     public function getId(): int
     {
@@ -46,23 +48,13 @@ class History
         $this->serverPort = $serverPort;
     }
 
-    public function getContainerCreated(): DateTime
+    public function getCreated(): DateTime
     {
-        return $this->containerCreated;
+        return $this->created;
     }
 
-    public function setContainerCreated(DateTime $containerCreated): void
+    public function setCreated(DateTime $created): void
     {
-        $this->containerCreated = $containerCreated;
-    }
-
-    public function getContainerRemoved(): DateTime
-    {
-        return $this->containerRemoved;
-    }
-
-    public function setContainerRemoved(DateTime $containerRemoved): void
-    {
-        $this->containerRemoved = $containerRemoved;
+        $this->created = $created;
     }
 }

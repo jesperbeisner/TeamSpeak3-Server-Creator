@@ -6,7 +6,9 @@ namespace App\Controller;
 
 use App\Entity\History;
 use App\Entity\Server;
+use App\Entity\Start;
 use App\Repository\ServerRepository;
+use App\Repository\StartRepository;
 use App\Service\DockerService;
 use App\Service\TeamSpeakService;
 use DateTime;
@@ -31,14 +33,34 @@ class TeamSpeakController extends AbstractController
 
         /** @var ServerRepository $serverRepository */
         $serverRepository = $entityManager->getRepository(Server::class);
-
         if (null === $server = $serverRepository->findOneBy(['port' => $port])) {
-            return $this->json(['message' => 'Specified port is not allowed'], 400);
+            return $this->json([
+                'status' => 'error',
+                'message' => 'Specified port is not allowed',
+            ], 400);
         }
+
+        /** @var StartRepository $startRepository */
+        $startRepository = $entityManager->getRepository(Start::class);
+        if (null !== $start = $startRepository->findLastCreatedStart()) {
+            $time = (new DateTime())->getTimestamp() - $start->getCreated()->getTimestamp();
+            if ($time < 60) {
+                $available = 60 - $time;
+                return $this->json([
+                    'status' => 'error',
+                    'message' => "The last create action was less than a minute ago. Try again in $available seconds.",
+                ]);
+            }
+        }
+
+        $start = new Start();
+        $start->setServerPort($port);
+        $entityManager->persist($start);
+        $entityManager->flush();
 
         if (null !== $server->getContainerCreated()) {
             $history = new History();
-            $history->setServerId($server->getId());
+            $history->setServerPort($server->getPort());
             $history->setContainerCreated($server->getContainerCreated());
             $history->setContainerRemoved(new DateTime());
 
@@ -50,7 +72,7 @@ class TeamSpeakController extends AbstractController
         $dockerService->removeTeamSpeakContainer($server);
         sleep(1);
         $dockerService->startTeamSpeakContainer($server);
-        sleep(10);
+        sleep(8);
         [$apiKey, $serverAdminToken] = $dockerService->getApiKeyAndToken($server);
 
         $server->setContainerCreated(new DateTime());
@@ -87,6 +109,7 @@ class TeamSpeakController extends AbstractController
         $entityManager->flush();
 
         return $this->json([
+            'status' => 'success',
             'url' => "teamspeak.jesperbeisner.dev:{$server->getPort()}",
             'server-admin-token' => $serverAdminToken,
             'created' => $server->getContainerCreated()->format('d.m.Y H:i:s'),
@@ -100,12 +123,15 @@ class TeamSpeakController extends AbstractController
         $serverRepository = $entityManager->getRepository(Server::class);
 
         if (null === $server = $serverRepository->findOneBy(['port' => $port])) {
-            return $this->json(['message' => 'Specified port is not allowed'], 400);
+            return $this->json([
+                'status' => 'error',
+                'message' => 'Specified port is not allowed',
+            ], 400);
         }
 
         if (null !== $server->getContainerCreated()) {
             $history = new History();
-            $history->setServerId($server->getId());
+            $history->setServerPort($server->getPort());
             $history->setContainerCreated($server->getContainerCreated());
             $history->setContainerRemoved(new DateTime());
 
@@ -118,6 +144,6 @@ class TeamSpeakController extends AbstractController
 
         $dockerService->removeTeamSpeakContainer($server);
 
-        return $this->json(['message' => 'Success']);
+        return $this->json(['status' => 'success']);
     }
 }
